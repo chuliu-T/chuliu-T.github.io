@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
-import Dashboard from '../views/Dashboard.vue'
-import CMDB from '../views/CMDB.vue'
-import Profile from '../views/Profile.vue'
+import Login from '../views/Login-main.vue'
+import Register from '../views/Register-main.vue'
+import Dashboard from '../views/Dashboard-main.vue'
+import CMDB from '../views/CMDB-main.vue'
+import Profile from '../views/Profile-main.vue'
 
 const routes = [
   {
