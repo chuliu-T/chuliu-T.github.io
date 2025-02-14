@@ -4,14 +4,15 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from ..core.database import get_db
 from . import schemas
-from .utils import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from .utils import verify_password, create_access_token
+# from .utils import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from ..users import crud as user_crud
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 @router.post("/", response_model=schemas.User)
-def create_user(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
+def create_user(user_in: schemas.User, db: Session = Depends(get_db)):
     db_user = user_crud.user.get_by_email(db, email=user_in.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")

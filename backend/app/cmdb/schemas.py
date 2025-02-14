@@ -8,6 +8,10 @@ class CMDBItemBase(BaseModel):
 class CMDBItemCreate(CMDBItemBase):
     pass
 
+class CMDBItemUpdate(CMDBItemBase):
+    pass
+
+
 class CMDBItem(CMDBItemBase):
     id: int
     owner_id: int
