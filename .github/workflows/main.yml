@@ -13,16 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4  # ✅ 正确缩进：与 name 对齐
 
-      # 2. 安装依赖并构建
-      - name: Install and Build
+      # 2.1 设置 Node.js 环境
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'v18.17.1'  # 指定你想要的 Node.js 版本，这里以 18 为例
-          cache: 'npm'  # 可选：缓存 npm 依赖，加快后续构建速度
+          node-version: 'v18.17.1'
+          cache: 'npm'  # 自动缓存 node_modules 到 GitHub 服务器
+
+      # 2.2 安装依赖并构建
+      - name: Install and Build
         run: |
-          cd ./frontend
+          cd ./frontend      # 进入前端目录（确保路径存在）
           npm install
-          npm run build
+          npm run build      # 根据实际项目修改构建命令（如 `npm run build:prod`）
 
       # 3. 通过 SCP 传输文件
       - name: Upload files via SCP
