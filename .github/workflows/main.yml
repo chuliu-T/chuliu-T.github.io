@@ -2,43 +2,42 @@ name: CI/CD to Aliyun
 
 on:
   push:
-    branches: [ "main" ]  # 监听 main 分支的推送
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. 拉取代码
-    - name: Checkout code
-    - uses: actions/checkout@v4
+      # 1. 拉取代码（修正缩进）
+      - name: Checkout code
+        uses: actions/checkout@v4  # ✅ 正确缩进：与 name 对齐
 
-    # 2. 安装依赖并构建（示例为 Node.js 项目）
-    - name: Install and Build
-      run: |
-        npm install
-        npm run build
+      # 2. 安装依赖并构建
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
 
-    # 3. 通过 scp 连接传输到阿里云服务器
-    - name: Upload files via SCP
-      uses: appleboy/scp-action@v0.1.0  # 使用具体版本号
-      with:
-        host: ${{ secrets.IP }}
-        username: ${{ secrets.ALIYUN_SSH_USER }}
-        key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
-        source: "dist/"
-        target: "/var/www/myapp"
-    
-    # 4. 通过 SSH 连接阿里云服务器并启动
-    - name: Deploy to Aliyun
-      uses: appleboy/ssh-action@v0.3.0   # 使用具体版本号
-      with:
-        host: ${{ secrets.IP }}
-        username: ${{ secrets.ALIYUN_SSH_USER }}
-        key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
-        script: |
-          cd /var/www/myapp
-          git pull origin main          # 拉取最新代码（可选，如果直接传输文件可省略）
-          rm -rf ./dist                # 清理旧构建文件
-          sudo systemctl restart myapp # 重启应用服务
-   
+      # 3. 通过 SCP 传输文件
+      - name: Upload files via SCP
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          source: "dist/"
+          target: "/var/www/myapp"
+
+      # 4. 通过 SSH 部署
+      - name: Deploy to Aliyun
+        uses: appleboy/ssh-action@v0.3.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/myapp
+            git pull origin main
+            rm -rf ./dist
+            sudo systemctl restart myapp
