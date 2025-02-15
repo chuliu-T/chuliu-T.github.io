@@ -35,7 +35,7 @@ jobs:
           host: ${{ secrets.IP }}
           username: ${{ secrets.ALIYUN_SSH_USER }}
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
-          source: "dist/"
+          source: "./frontend/dist/"
           target: "/var/www/myapp"
 
       # 4. 通过 SSH 部署
