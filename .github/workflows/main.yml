@@ -21,7 +21,7 @@ jobs:
 
     # 3. 通过 scp 连接传输到阿里云服务器
     - name: Upload files via SCP
-      uses: appleboy/scp-action@v0.1.7
+      uses: appleboy/scp-action@v0.1.0  # 使用具体版本号
       with:
         host: ${{ secrets.IP }}
         username: ${{ secrets.ALIYUN_SSH_USER }}
@@ -31,7 +31,7 @@ jobs:
     
     # 4. 通过 SSH 连接阿里云服务器并启动
     - name: Deploy to Aliyun
-      uses: appleboy/ssh-action@v1
+      uses: appleboy/ssh-action@v0.3.0   # 使用具体版本号
       with:
         host: ${{ secrets.IP }}
         username: ${{ secrets.ALIYUN_SSH_USER }}
