@@ -31,7 +31,7 @@ jobs:
 
       # 4. 通过 SSH 部署
       - name: Deploy to Aliyun
-        uses: appleboy/ssh-action@v0.3.0
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.IP }}
           username: ${{ secrets.ALIYUN_SSH_USER }}
