@@ -15,7 +15,12 @@ jobs:
 
       # 2. 安装依赖并构建
       - name: Install and Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'v18.17.1'  # 指定你想要的 Node.js 版本，这里以 18 为例
+          cache: 'npm'  # 可选：缓存 npm 依赖，加快后续构建速度
         run: |
+          cd ./frontend
           npm install
           npm run build
 
