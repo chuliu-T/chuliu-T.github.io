@@ -1,0 +1,2 @@
+
+pip install fastapi uvicorn[standard] sqlalchemy pydantic[email] passlib python-jose  python-multipart

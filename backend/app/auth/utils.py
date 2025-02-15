@@ -3,8 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from ..core.database import get_db
 from ..core.security import verify_password, create_access_token, ALGORITHM, SECRET_KEY
+# from ..core.security import verify_password, create_access_token, ALGORITHM, SECRET_KEY
 from jose import JWTError
-
+ACCESS_TOKEN_EXPIRE_MINUTES  = 30
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 async def get_current_user(

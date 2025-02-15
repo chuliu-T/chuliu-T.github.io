@@ -5,7 +5,7 @@ from datetime import timedelta
 from ..core.database import get_db
 from . import schemas
 from .utils import verify_password, create_access_token
-# from .utils import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from .utils import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from ..users import crud as user_crud
 
 router = APIRouter()

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from ..core.database import get_db
 from . import schemas
+from .schemas import UserSchema
 from .crud import user
 from ..auth.utils import oauth2_scheme, get_current_user
 
@@ -17,11 +18,14 @@ def create_user(
     创建新用户
     """
     db_user = user.get_by_email(db, email=user_in.email)
+    print("创建新用户-------------------")
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
+    new_user = user.create(db=db, obj_in=user_in)
+    return new_user
     return user.create(db=db, obj_in=user_in)
 
 @router.get("/me", response_model=schemas.User)

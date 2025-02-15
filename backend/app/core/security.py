@@ -3,8 +3,9 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
 
-# 密码加密配置
+# 定义密码哈希上下文
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 # JWT 配置
 SECRET_KEY = "your-secret-key-here"  # 在生产环境中应使用环境变量
@@ -14,7 +15,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
-def get_password_hash(password: str):
+def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):

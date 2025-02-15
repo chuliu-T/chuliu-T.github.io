@@ -2,6 +2,9 @@ from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime, T
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .database import Base
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel
 
 class User(Base):
     __tablename__ = "users"
@@ -15,6 +18,18 @@ class User(Base):
 
     # 关系
     items = relationship("CMDBItem", back_populates="owner")
+
+
+class UserSchema(BaseModel):
+    id: int
+    email: str
+    hashed_password: str
+    is_active: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
 
 class CMDBItem(Base):
     __tablename__ = "cmdb_items"
