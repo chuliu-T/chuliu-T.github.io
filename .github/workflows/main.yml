@@ -11,7 +11,7 @@ jobs:
     steps:
     # 1. 拉取代码
     - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     # 2. 安装依赖并构建（示例为 Node.js 项目）
     - name: Install and Build
@@ -21,7 +21,7 @@ jobs:
 
     # 3. 通过 scp 连接传输到阿里云服务器
     - name: Upload files via SCP
-      uses: appleboy/scp-action@v1
+      uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.IP }}
         username: ${{ secrets.ALIYUN_SSH_USER }}
