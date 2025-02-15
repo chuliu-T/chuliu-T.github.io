@@ -5,7 +5,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  build-and-deploy--to-aliyun:
+    environment: ALIYUN_HOST
     runs-on: ubuntu-latest
 
     steps:
