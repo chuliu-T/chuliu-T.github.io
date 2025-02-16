@@ -14,6 +14,7 @@ WORKDIR /backend
 COPY --from=builder /root/.local /root/.local
 # 确保PATH包含用户安装目录
 ENV PATH=/root/.local/bin:$PATH
+RUN pip install uvicorn
 
 COPY ./* ./
 
