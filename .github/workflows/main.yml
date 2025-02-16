@@ -53,7 +53,7 @@ jobs:
           username: ${{ secrets.ALIYUN_SSH_USER }}
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
           source: "./frontend/dist/"
-          target: "/var/www/frontend/dist/"
+          target: "/var/www/"
 
       # 后端第1种部署方式 在服务器上直接部署
       # 4. 通过 SSH 部署
@@ -83,8 +83,8 @@ jobs:
           script: |
             cd /opt/chuliu-T.github.io/backend
             git pull origin main
-            docker build -t backend:latest .
             docker rm -f /backend
+            docker rmi backend:latest
             docker build -t backend:latest .
             docker run -d --name backend -p 8000:8000 backend:latest
           
