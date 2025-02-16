@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://106.14.91.113:8000', // 确保协议和端口正确
+  baseURL: '/api', // 确保协议和端口正确
   headers: {
     'Content-Type': 'application/json'
   }
