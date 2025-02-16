@@ -17,9 +17,8 @@ app = FastAPI(
     version="1.0.0"
 )
 
-
 origins = [
-    "http://106.14.91.113:8900",  # 正确写法
+    "http://106.14.91.113:8900",
     "http://localhost:8900",
     "http://localhost",
 ]
@@ -32,8 +31,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # 你的路由和其他代码
-app.include_router(users_router, prefix="/users", tags=["users"])
 
 # Include routers from different modules
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
