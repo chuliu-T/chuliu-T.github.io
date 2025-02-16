@@ -110,12 +110,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 'v18.17.1'
-          cache: 'npm'
+          # cache: 'npm'
 
       # 2.2 安装依赖、构建
       - name: Install and Build
         run: |
           cd ./frontend
+          # npm clean-install
           npm install
           npm run build
 
