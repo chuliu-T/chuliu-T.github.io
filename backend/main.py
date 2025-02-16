@@ -19,11 +19,9 @@ app = FastAPI(
 
 
 origins = [
-    "http://106.14.91.113",
-    "http://106.14.91.113:8900",  # 根据你的前端端口修改
+    "http://106.14.91.113:8900",  # 正确写法
+    "http://localhost:8900",
     "http://localhost",
-    "*",
-    # 可以添加更多允许的域名
 ]
 
 app.add_middleware(
