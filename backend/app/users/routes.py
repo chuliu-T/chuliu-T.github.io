@@ -26,7 +26,6 @@ def create_user(
         )
     new_user = user.create(db=db, obj_in=user_in)
     return new_user
-    return user.create(db=db, obj_in=user_in)
 
 @router.get("/me", response_model=schemas.User)
 def read_user_me(

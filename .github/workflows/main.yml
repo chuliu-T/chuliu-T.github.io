@@ -117,6 +117,16 @@ jobs:
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
           source: "./frontend/dist/"
           target: "/var/www/myapp-release"
+  
+      - name: 重启 Nginx
+        uses: appleboy/ssh-action@v1.2.0
+        timeout-minutes: 30
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          script: |
+            sudo systemctl restart nginx
 
 
   # 通过 main 分支的 backend 标签触发

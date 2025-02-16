@@ -20,7 +20,7 @@ app = FastAPI(
 
 origins = [
     "http://localhost",
-    "http://localhost:8080",  # 根据你的前端端口修改
+    "http://106.14.91.113/:8900",  # 根据你的前端端口修改
     # 可以添加更多允许的域名
 ]
 
