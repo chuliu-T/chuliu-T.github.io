@@ -118,9 +118,16 @@ jobs:
           username: ${{ secrets.ALIYUN_SSH_USER }}
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
           script: |
-            docker login --username=$ALIYUN_DOCKER_USERNAME --password=$ALIYUN_DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
-            docker pull registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
-            docker run -d -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
+            cd /opt/chuliu-T.github.io/backend
+            git pull origin main
+            docker build -t backend:latest .
+            docker rm -f /backend
+            docker build -t backend:latest .
+            docker run  --name backend -p 8000:8000 backend:latest
+          
+      # docker login --username=$ALIYUN_DOCKER_USERNAME --password=$ALIYUN_DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
+      # docker pull registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
+      # docker run -d -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
 
   # 通过 main 分支的 backend 标签触发
   build-and-deploy--backend:
