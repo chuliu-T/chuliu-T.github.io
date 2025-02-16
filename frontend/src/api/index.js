@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api', // 关键！使用代理前缀
+  baseURL: '/api', // 关键修改！使用代理前缀
   headers: { 'Content-Type': 'application/json' }
-});
-
+})
 // 请求拦截器
 api.interceptors.request.use(
   config => {
