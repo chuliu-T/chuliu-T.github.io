@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '106.14.91.113:8000',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
+  baseURL: '/api', // 代理前缀
+  // 不再设置默认 Content-Type
+});
+
 // 请求拦截器
 api.interceptors.request.use(
   config => {
