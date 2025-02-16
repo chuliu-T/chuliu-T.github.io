@@ -95,18 +95,18 @@ jobs:
 
       # 后端第1种部署方式 在服务器上直接部署
       # 4. 通过 SSH 部署
-      - name: Deploy to Aliyun
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.IP }}
-          username: ${{ secrets.ALIYUN_SSH_USER }}
-          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
-          script: |
-            cd /opt/chuliu-T.github.io
-            git pull origin main
-            cd ./backend/
-            bash pip3.10 install -r requirements.txt
-            sudo systemctl restart uvicorn.service
+      # - name: Deploy to Aliyun
+      #   uses: appleboy/ssh-action@v1.2.0
+      #   with:
+      #     host: ${{ secrets.IP }}
+      #     username: ${{ secrets.ALIYUN_SSH_USER }}
+      #     key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+      #     script: |
+      #       cd /opt/chuliu-T.github.io
+      #       git pull origin main
+      #       cd ./backend/
+      #       bash pip3.10 install -r requirements.txt
+      #       sudo systemctl restart uvicorn.service
 
       # 后端第二种部署方式 通过 docker 部署
       # 先打包镜像 推送到阿里云镜像仓库
