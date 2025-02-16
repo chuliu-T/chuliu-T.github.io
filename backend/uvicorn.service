@@ -1,0 +1,17 @@
+[Unit]
+Description=Uvicorn instance to serve main:app
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/uvicorn main:app --reload
+WorkingDirectory=/path/to/your/project
+Restart=always
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=uvicorn
+User=your_username
+Group=your_group
+
+[Install]
+WantedBy=multi-user.target
