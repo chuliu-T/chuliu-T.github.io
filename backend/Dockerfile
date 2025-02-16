@@ -3,7 +3,8 @@ FROM python:3.10-slim as builder
 
 WORKDIR /backend
 COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --user --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip install uvicorn
 
 # 第二阶段：生产镜像
 FROM python:3.10-slim
