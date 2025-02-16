@@ -1,35 +1,20 @@
-# backend/Dockerfile
-FROM centos:7 AS builder
+# 第一阶段：构建依赖
+FROM python:3.10-slim as builder
 
-# 安装编译工具和 OpenSSL 1.1.1
-RUN yum install -y gcc make zlib-devel openssl-devel
-RUN curl https://pyenv.run | bash
-ENV HOME /root
-ENV PYENV_ROOT $HOME/.pyenv
-ENV PATH $PYENV_ROOT/bin:$PATH
-RUN echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
-
-# 安装 Python 3.10.13
-RUN pyenv install 3.10.13
-ENV PATH $PYENV_ROOT/versions/3.10.13/bin:$PATH
-
-# 安装依赖
-WORKDIR /app
+WORKDIR /backend
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --user --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-# ----------------------------
-# 生产镜像
-FROM centos:7
+# 第二阶段：生产镜像
+FROM python:3.10-slim
 
-# 仅复制运行时依赖
-COPY --from=builder /root/.pyenv /root/.pyenv
-COPY --from=builder /app /app
+WORKDIR /backend
+# 从builder阶段复制已安装的依赖
+COPY --from=builder /root/.local /root/.local
+# 确保PATH包含用户安装目录
+ENV PATH=/root/.local/bin:$PATH
 
-# 设置环境变量
-ENV PYENV_ROOT /root/.pyenv
-ENV PATH $PYENV_ROOT/versions/3.10.13/bin:$PATH
+COPY ./backend ./backend
 
-# 启动命令
-WORKDIR /app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 8000
+CMD ["uvicorn", " main:app ", "--reload"]
