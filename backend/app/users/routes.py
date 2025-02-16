@@ -9,6 +9,10 @@ from ..auth.utils import oauth2_scheme, get_current_user
 
 router = APIRouter()
 
+@router.post("/ous")
+def redirect_users():
+    return {"message": "This is a user"}
+
 @router.post("/", response_model=schemas.User)
 def create_user(
     user_in: schemas.UserCreate,
