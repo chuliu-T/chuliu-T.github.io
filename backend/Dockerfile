@@ -16,7 +16,7 @@ COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 RUN pip install uvicorn
 
-COPY ./* ./
+COPY . ./
 
 EXPOSE 8000
 CMD ["uvicorn", "main:app", "--reload"]
