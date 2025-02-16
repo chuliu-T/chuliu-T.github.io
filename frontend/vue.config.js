@@ -6,8 +6,7 @@ module.exports = defineConfig({
       '/api': {
         target: 'http://106.14.91.113:8000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        pathRewrite: { '^/api': '' }
+        pathRewrite: { '^/api': '' } // 仅保留这一项
       }
     }
   }
