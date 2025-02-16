@@ -123,7 +123,7 @@ jobs:
             docker build -t backend:latest .
             docker rm -f /backend
             docker build -t backend:latest .
-            docker run  --name backend -p 8000:8000 backend:latest
+            docker run -d --name backend -p 8000:8000 backend:latest
           
       # docker login --username=$ALIYUN_DOCKER_USERNAME --password=$ALIYUN_DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
       # docker pull registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
