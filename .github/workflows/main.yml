@@ -60,7 +60,7 @@ jobs:
 
   # 通过 main 分支的 frontend 标签触发
   build-and-deploy--frontend:
-    if: github.ref == 'refs/heads/frontend'
+    if: github.ref == 'refs/heads/main'
     environment: ALIYUN_HOST
     runs-on: ubuntu-latest
 
