@@ -18,21 +18,21 @@ jobs:
     steps:
       # 1. 拉代码
       - name: Checkout code
-        uses: actions/checkout@v4  
+        uses: actions/checkout@v4
 
       # 2.1 设置 Node.js 环境
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 'v18.17.1'
-          cache: 'npm'  # 缓存方便下次更快的构建
+          cache: 'npm'
 
       # 2.2 安装依赖、构建
       - name: Install and Build
         run: |
           cd ./frontend
           npm install
-          npm run build      # 根据实际项目修改构建命令（如 `npm run build:prod`）
+          npm run build
 
       # 3. 通过 SCP 传输文件
       - name: Upload files via SCP
@@ -42,25 +42,50 @@ jobs:
           username: ${{ secrets.ALIYUN_SSH_USER }}
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
           source: "./frontend/dist/"
-          target: "/var/www/"
+          target: "/var/www/myapp-release"
 
+      # 后端第1种部署方式 在服务器上直接部署
       # 4. 通过 SSH 部署
-      - name: Deploy to Aliyun
+      # - name: Deploy to Aliyun
+      #   uses: appleboy/ssh-action@v1.2.0
+      #   with:
+      #     host: ${{ secrets.IP }}
+      #     username: ${{ secrets.ALIYUN_SSH_USER }}
+      #     key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+      #     script: |
+      #       cd /opt/chuliu-T.github.io
+      #       git pull origin main
+      #       cd ./backend/
+      #       bash pip3.10 install -r requirements.txt
+      #       sudo systemctl restart uvicorn.service
+
+      # 后端第二种部署方式 通过 docker 部署
+      # 先打包镜像 推送到阿里云镜像仓库
+      # 再通过 ssh 登录到服务器拉取镜像运行
+      - name: Deploy to Aliyun by Docker
         uses: appleboy/ssh-action@v1.2.0
+        timeout-minutes: 30
         with:
           host: ${{ secrets.IP }}
           username: ${{ secrets.ALIYUN_SSH_USER }}
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/myapp
+            cd /opt/chuliu-T.github.io/backend
             git pull origin main
-            rm -rf ./dist
-            sudo systemctl restart myapp
+            docker build -t backend:latest .
+            docker rm -f /backend
+            docker build -t backend:latest .
+            docker run -d --name backend -p 8000:8000 backend:latest
+          
+      # docker login --username=$ALIYUN_DOCKER_USERNAME --password=$ALIYUN_DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
+      # docker pull registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
+      # docker run -d -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/chuliu-t/myapp-backend:latest
+
 
 
   # 通过 main 分支的 frontend 标签触发
   build-and-deploy--frontend:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/frontend'
     environment: ALIYUN_HOST
     runs-on: ubuntu-latest
 
