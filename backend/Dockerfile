@@ -19,4 +19,4 @@ RUN pip install uvicorn
 COPY ./* ./
 
 EXPOSE 8000
-CMD ["uvicorn", " main:app ", "--reload"]
+CMD ["uvicorn", "main:app", "--reload"]
