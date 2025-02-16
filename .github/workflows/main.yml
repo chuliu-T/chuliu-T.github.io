@@ -2,29 +2,35 @@ name: CI/CD to Aliyun
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - backend
+      - frontend
+      - prod
+      - main
 
+      # 通过 main 触发
 jobs:
   build-and-deploy--to-aliyun:
+    if: github.ref == 'refs/heads/main'
     environment: ALIYUN_HOST
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 拉取代码（修正缩进）
+      # 1. 拉代码
       - name: Checkout code
-        uses: actions/checkout@v4  # ✅ 正确缩进：与 name 对齐
+        uses: actions/checkout@v4  
 
       # 2.1 设置 Node.js 环境
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 'v18.17.1'
-          cache: 'npm'  # 自动缓存 node_modules 到 GitHub 服务器
+          cache: 'npm'  # 缓存方便下次更快的构建
 
-      # 2.2 安装依赖并构建
+      # 2.2 安装依赖、构建
       - name: Install and Build
         run: |
-          cd ./frontend      # 进入前端目录（确保路径存在）
+          cd ./frontend
           npm install
           npm run build      # 根据实际项目修改构建命令（如 `npm run build:prod`）
 
@@ -36,7 +42,7 @@ jobs:
           username: ${{ secrets.ALIYUN_SSH_USER }}
           key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
           source: "./frontend/dist/"
-          target: "/var/www/myapp"
+          target: "/var/www/"
 
       # 4. 通过 SSH 部署
       - name: Deploy to Aliyun
@@ -50,3 +56,150 @@ jobs:
             git pull origin main
             rm -rf ./dist
             sudo systemctl restart myapp
+
+
+  # 通过 main 分支的 frontend 标签触发
+  build-and-deploy--frontend:
+    if: github.ref == 'refs/heads/frontend'
+    environment: ALIYUN_HOST
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2.1 设置 Node.js 环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'v18.17.1'
+          cache: 'npm'
+
+      # 2.2 安装依赖、构建
+      - name: Install and Build
+        run: |
+          cd ./frontend
+          npm install
+          npm run build
+
+      # 3. 通过 SCP 传输文件
+      - name: Upload files via SCP
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          source: "./frontend/dist/"
+          target: "/var/www/myapp-release"
+
+      # 4. 通过 SSH 部署
+      - name: Deploy to Aliyun
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/myapp-release
+            git pull origin release
+            rm -rf ./dist
+            sudo systemctl restart myapp-release
+
+
+  # 通过 main 分支的 backend 标签触发
+  build-and-deploy--backend:
+    if: github.ref == 'refs/heads/backend'
+    environment: ALIYUN_HOST
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2.1 设置 Node.js 环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'v18.17.1'
+          cache: 'npm'
+
+      # 2.2 安装依赖、构建
+      - name: Install and Build
+        run: |
+          cd ./frontend
+          npm install
+          npm run build
+
+      # 3. 通过 SCP 传输文件
+      - name: Upload files via SCP
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          source: "./frontend/dist/"
+          target: "/var/www/myapp-release"
+
+      # 4. 通过 SSH 部署
+      - name: Deploy to Aliyun
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/myapp-release
+            git pull origin release
+            rm -rf ./dist
+            sudo systemctl restart myapp-release
+    
+
+      # 通过 main 分支的 prod 标签触发
+  build-and-deploy-prod:
+    if: github.ref == 'refs/heads/prod'
+    environment: ALIYUN_HOST
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2.1 设置 Node.js 环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'v18.17.1'
+          cache: 'npm'
+
+      # 2.2 安装依赖、构建
+      - name: Install and Build
+        run: |
+          cd ./frontend
+          npm install
+          npm run build
+
+      # 3. 通过 SCP 传输文件
+      - name: Upload files via SCP
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          source: "./frontend/dist/"
+          target: "/var/www/myapp-prod"
+
+      # 4. 通过 SSH 部署
+      - name: Deploy to Aliyun
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.ALIYUN_SSH_USER }}
+          key: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/myapp-prod
+            git pull origin prod
+            rm -rf ./dist
+            sudo systemctl restart myapp-prod
