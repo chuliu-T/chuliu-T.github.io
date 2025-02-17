@@ -20,7 +20,7 @@ api.interceptors.request.use(
 export const auth = {
   login: (email, password) =>
     api.post(
-      '/auth/token',
+      '/api/auth/token',
       { username: email, password },
       {
         headers: {
@@ -30,7 +30,7 @@ export const auth = {
       }
     ),
   register: (email, password) =>
-    api.post('/users', { email, password }),
+    api.post('/api/users', { email, password }),
 };
 
 
