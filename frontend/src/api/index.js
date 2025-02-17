@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: '/api',  // 修改为相对路径
+  baseURL: 'http://106.14.91.113:8000',  // 直接使用后端地址
   headers: {
     'Content-Type': 'application/json'
   }
@@ -26,7 +26,7 @@ export const auth = {
     api.post('/auth/token', new URLSearchParams({
       username: email,
       password: password
-    }).toString(), {  // 添加 toString()
+    }).toString(), {
       headers: { 
         'Content-Type': 'application/x-www-form-urlencoded'
       }
