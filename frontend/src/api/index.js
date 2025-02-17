@@ -26,8 +26,10 @@ export const auth = {
     api.post('/auth/token', new URLSearchParams({
       username: email,
       password: password
-    }), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    }).toString(), {  // 添加 toString()
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     }),
   register: (email, password) => 
     api.post('/users', { email, password })
