@@ -1,39 +1,37 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const api = axios.create({
-  baseURL: '/api', // 代理前缀
-  // 不再设置默认 Content-Type
-});
+  baseURL: '/api',  // 修改为相对路径
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
 
 // 请求拦截器
 api.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`
     }
-    return config;
+    return config
   },
-  error => Promise.reject(error)
-);
+  error => {
+    return Promise.reject(error)
+  }
+)
 
 export const auth = {
-  login: (email, password) =>
-    api.post(
-      '/auth/token',
-      { username: email, password },
-      {
-        headers: {
-          // 仅在此处设置表单格式
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      }
-    ),
-  register: (email, password) =>
-    api.post('/users', { email, password }),
-};
-
-
+  login: (email, password) => 
+    api.post('/auth/token', new URLSearchParams({
+      username: email,
+      password: password
+    }), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    }),
+  register: (email, password) => 
+    api.post('/users', { email, password })
+}
 
 export const users = {
   getProfile: () => api.get('/users/me'),
@@ -47,4 +45,4 @@ export const cmdb = {
   deleteItem: (id) => api.delete(`/cmdb/${id}`)
 }
 
-export default api 
+export default api

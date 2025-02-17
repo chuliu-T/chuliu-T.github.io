@@ -39,6 +39,7 @@ const handleLogin = async () => {
     ElMessage.success('登录成功')
     router.push('/dashboard')
   } catch (error) {
+    console.error('Login error:', error)
     ElMessage.error(error.response?.data?.detail || '登录失败')
   } finally {
     loading.value = false

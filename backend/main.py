@@ -17,6 +17,8 @@ app = FastAPI(
     version="1.0.0"
 )
 
+
+# ... 其他路由配置 ...
 origins = [
     "http://106.14.91.113:8900",
     "http://localhost:8900",
@@ -27,7 +29,8 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
