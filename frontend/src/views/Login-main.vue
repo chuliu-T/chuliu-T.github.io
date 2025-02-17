@@ -33,6 +33,7 @@ const form = ref({
 const handleLogin = async () => {
   try {
     loading.value = true
+    console.log("auth");
     const response = await auth.login(form.value.email, form.value.password)
     localStorage.setItem('token', response.data.access_token)
     ElMessage.success('登录成功')
